@@ -53,6 +53,11 @@
         <Border Style="{DynamicResource EsriSampleControlPanel}">
             <ScrollView>
                 <StackLayout>
+                    <Slider x:Name="MapRotation" Minimum="0" Maximum="360" ValueChanged="Slider_ValueChanged"/>
+                    <HorizontalStackLayout>
+                        <Label Text="Rotation:"/>
+                        <Label Text="{Binding Source={x:Reference MapRotation}, Path=Value}"/>
+                    </HorizontalStackLayout>
                     <Label Margin="5"
                            FontAttributes="Bold"
                            FontSize="20"

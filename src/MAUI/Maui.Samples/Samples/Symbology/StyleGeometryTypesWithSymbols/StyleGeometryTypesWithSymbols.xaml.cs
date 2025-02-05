@@ -9,6 +9,7 @@
 
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Mapping.Labeling;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using System.Reflection;
@@ -53,6 +54,29 @@ namespace ArcGIS.Samples.StyleGeometryTypesWithSymbols
 
             // A graphics overlay for displaying the geometry graphics on the map view.
             var graphicsOverlay = new GraphicsOverlay();
+
+            // Enable lables
+            graphicsOverlay.LabelsEnabled = true;
+
+            // Define a label. It sounds like TextLayout = LabelTextLayout.Horizontal would keep the text always horizontal right-side-up
+            //  on the screen, but it doesn't.
+            var labelDef = new LabelDefinition(new ArcadeLabelExpression("return \"testing\""),
+               new TextSymbol
+               {
+                   BackgroundColor = Color.White,
+                   OffsetY = 10,
+                   Size = 20
+               })
+            {
+                DeconflictionStrategy = LabelDeconflictionStrategy.None,
+                LineConnection = LabelLineConnection.None,
+                RepeatStrategy = LabelRepeatStrategy.None,
+                StackStrategy = LabelStackStrategy.None,
+                TextLayout = LabelTextLayout.Horizontal,
+                //Angle = new LabelAngle(new Esri.ArcGISRuntime.ArcadeExpression("return 0"))
+            };
+
+            graphicsOverlay.LabelDefinitions.Add(labelDef);
 
             // Create the simple marker symbol for styling the point.
             var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Purple, 12);
@@ -177,6 +201,18 @@ namespace ArcGIS.Samples.StyleGeometryTypesWithSymbols
             }
 
             return new Graphic(point, pinSymbol);
+        }
+
+        private async void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            try
+            {
+                await MyMapView.SetViewpointRotationAsync(e.NewValue);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         #region UI event handlers
